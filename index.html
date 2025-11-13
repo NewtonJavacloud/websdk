@@ -80,6 +80,7 @@
             <select id="workFlow">
                 <option value="liveness">Liveness</option>
                 <option value="user-onboarding-auth">One-Click Onboarding</option>
+                <option value="identity-verification">Full KYC with OCR</option>
             </select>
         </div>
 
@@ -159,8 +160,10 @@
           const themeConfigs = document.getElementById('themeConfig').value;
           const workflow = document.getElementById('workFlow').value;
           const livenessConfig = document.getElementById('livenessConfig').value;
+          const identifyVerificationConfig = document.getElementById('identifyVerificationConfig').value;
           // Convert the string to an object
           const livenessDynamicConfig = Function('"use strict";return ({' + livenessConfig + '})')();
+          const identifyVerificationDynamicConfig = Function('"use strict";return ({' + identifyVerificationConfig + '})')();
     
           try {
             const parsedLocaleConfigs = JSON.parse(localeConfigs || '{}');
@@ -177,7 +180,8 @@
                   logo: "https://vida-assets.s3.ap-south-1.amazonaws.com/linkedin_icon.png",
                   name: "Linkedin",
                 },
-                workflowConfigs: { 
+                workflowConfigs: {
+                    
                     
                     liveness:{
                     skipTutorialScreen:skipTutorialScreen,
@@ -185,8 +189,10 @@
                     cameraFrameShape,
                     maxRetryAttempts,
                     detectionTimeOut:detectionTimeout,
-                    ...livenessDynamicConfig
-                  }
+                    ...livenessDynamicConfig,
+                   
+                  },
+                  ...identifyVerificationDynamicConfig
                 }, 
                 onComplete: (apiResponse) => { 
                     console.log('API Response:', apiResponse); 
