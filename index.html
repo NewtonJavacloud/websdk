@@ -171,7 +171,7 @@
                                 ? document.getElementById('themeConfig').value : '';
           const workflow = document.getElementById('workFlow').value;
           const livenessConfig = document.getElementById('livenessConfig').value;
-          const identifyVerificationConfig = document.getElementById('backCardConfig').value;
+          const identifyVerificationConfig = document.getElementById('backCardConfig').checked;
           // Convert the string to an object
           const livenessDynamicConfig = Function('"use strict";return ({' + livenessConfig + '})')();
     
