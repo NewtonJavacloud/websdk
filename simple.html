@@ -19,9 +19,10 @@
   <h1>Start Liveness Detection</h1>
   
 <div id="vida-container" class="container">
-    <input type="hidden" id="encrypted-data" class="hidden-input">
-    <input type="hidden" id="iv" class="hidden-input">
-    <input type="hidden" id="token" class="hidden-input">
+    <input type="password" id="encrypted-data" style="display:none;">
+    <input type="password" id="iv" style="display:none;">
+    <input type="password" id="token" style="display:none;">
+    <input type="password" id="signingKey" style="display:none;">
     <input type="radio" name="env" value="qa" checked hidden>
     
     <div class="section">
@@ -90,11 +91,12 @@
         const skipTutorialScreen = document.getElementById('skipTutorial').checked;
         const skipSelfieReviewScreen = document.getElementById('skipSelfieReview').checked;
         const token = document.getElementById('token').value;
+        const signingKey = document.getElementById('signingKey').value;
         
         VidaSDK.init({
           token,
           locale,
-          signingKey: 'e67c72e265b6288d9652a14099b64dc0b2939cc3a47873656a729431946691a1',
+          signingKey,
           workflowConfigs:{
             liveness:{
                 skipTutorialScreen:skipTutorialScreen,
