@@ -57,11 +57,19 @@
             <input type="number" id="maxRetryAttempts" placeholder="Enter Max Retry Attempts" value="1">
             <h2>Detection Timeout (in milSec)</h2>
             <input type="number" id="detectionTimeout" placeholder="Enter Detection Timeout" value="30000">
-            <h2>IdVerification Config</h2>
-            <div class="checkbox-container">
-              <label><input type="checkbox" id="backCardConfig">Skip Back Card Capture</label>
-            </div>
-            
+        </div>
+        <div class="section">
+            <h2>idVerification Config</h2>
+            <textarea id="idVerifyConfig" placeholder="Enter idVerifyConfig" rows="10"></textarea>
+            <h2>Choose Country</h2>
+            <select id="countryCode">
+                <option value="MYS">Malaysia</option>
+                <option value="IDN">Indonesia</option>
+                <option value="PHL">Philippines</option>
+                <option value="SGP">Singapore</option>
+                <option value="THA">Thailand</option>
+                <option value="VNM">Vietnam</option>
+            </select>
         </div>
 
         <div class="section">
@@ -171,9 +179,11 @@
                                 ? document.getElementById('themeConfig').value : '';
           const workflow = document.getElementById('workFlow').value;
           const livenessConfig = document.getElementById('livenessConfig').value;
-          const identifyVerificationConfig = document.getElementById('backCardConfig').checked;
+          const idVerifyConfig = document.getElementById('idVerifyConfig').value;
+          const countryCode = document.getElementById('countryCode').value;
           // Convert the string to an object
           const livenessDynamicConfig = Function('"use strict";return ({' + livenessConfig + '})')();
+          const identifyVerificationConfig = Function('"use strict"; return ({'+ idVerifyConfig + '})')();
     
           try {
             const parsedLocaleConfigs = JSON.parse(localeConfigs || '{}');
@@ -185,6 +195,7 @@
                 partnerTransactionId, 
                 localeConfigs: parsedLocaleConfigs, 
                 themeConfigs: parsedThemeConfigs, 
+                countryCode,
                 workflow,
                 partner: {
                   logo: "https://vida-assets.s3.ap-south-1.amazonaws.com/linkedin_icon.png",
@@ -205,7 +216,9 @@
                     maxRetryAttempts,
                     detectionTimeOut:detectionTimeout,
                     ...livenessDynamicConfig
-                   
+                  },
+                    identityVerification:{
+                    ...identifyVerificationConfig
                   }
                 }, 
                 onComplete: (apiResponse) => { 
