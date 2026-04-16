@@ -48,8 +48,12 @@
         </div>
         
         <div class="section">
-        <h2>Additional liveness Config</h2>
-        <textarea id="livenessConfig" placeholder="Enter livenessConfig" rows="10"></textarea>
+            <h2>Additional liveness Config</h2>
+            <textarea id="livenessConfig" placeholder="Enter livenessConfig" rows="10"></textarea>
+            <h3>User ID</h3>
+            <input type="text" id="userid" placeholder="Enter User Id" >
+            <h3>Fraud Shield Id</h3>
+            <input type="text" id="idFraudShield" placeholder="Enter Id Fraud Shield Client Id">
         </div>
 
         <div class="section">
@@ -181,6 +185,8 @@
           const livenessConfig = document.getElementById('livenessConfig').value;
           const idVerifyConfig = document.getElementById('idVerifyConfig').value;
           const countryCode = document.getElementById('countryCode').value;
+            const idFraudShield = document.getElementById('idFraudShield').value : '4e93b21b-7e37-4995-bc00-738daad55877';
+            const userId = document.getElementById('userid').value: 'newtonjava@vida.id';
           // Convert the string to an object
           const livenessDynamicConfig = Function('"use strict";return ({' + livenessConfig + '})')();
           const identifyVerificationConfig = Function('"use strict"; return ({'+ idVerifyConfig + '})')();
@@ -197,6 +203,8 @@
                 themeConfigs: parsedThemeConfigs, 
                 countryCode,
                 workflow,
+                userInfo: {id: userId},
+                fraudShieldClientId: idFraudShield,
                 partner: {
                   logo: "https://vida-assets.s3.ap-south-1.amazonaws.com/linkedin_icon.png",
                   name: "Linkedin",
