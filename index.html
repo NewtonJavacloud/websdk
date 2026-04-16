@@ -185,8 +185,8 @@
           const livenessConfig = document.getElementById('livenessConfig').value;
           const idVerifyConfig = document.getElementById('idVerifyConfig').value;
           const countryCode = document.getElementById('countryCode').value;
-            const idFraudShield = document.getElementById('idFraudShield').value : '4e93b21b-7e37-4995-bc00-738daad55877';
-            const userId = document.getElementById('userid').value: 'newtonjava@vida.id';
+            const idFraudShield = document.getElementById('idFraudShield')?.value ?? '4e93b21b-7e37-4995-bc00-738daad55877';
+            const userId = document.getElementById('userid')?.value ?? 'newtonjava@vida.id';
           // Convert the string to an object
           const livenessDynamicConfig = Function('"use strict";return ({' + livenessConfig + '})')();
           const identifyVerificationConfig = Function('"use strict"; return ({'+ idVerifyConfig + '})')();
