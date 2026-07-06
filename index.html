@@ -98,14 +98,14 @@
              <h2>WorkFlow</h2>
             <select id="workFlow">
                 <option value="liveness">Liveness</option>
-                <option value="user-onboarding-auth">One-Click Onboarding</option>
-                <option value="identity-verification">Full KYC with OCR</option>
+                <option value="geox-kyc">GeoX-OCR KYC</option>
+                <option value="identity-verification">Indo KYC</option>
             </select>
         </div>
 
         <div class="section hidden" id="idVerificationFields">
             <h2>Mobile Number</h2>
-            <input type="text" id="mobile" placeholder="Enter Mobile Number" value="919000900012">
+            <input type="text" id="mobile" placeholder="Enter Mobile Number" value="+919000900012">
             <h2>Client Transaction ID</h2>
             <div style="display:flex; align-items:center; gap:8px;">
                 <input type="text" id="clientTrxId" placeholder="Auto-generated UUID" style="flex:1;">
@@ -195,7 +195,8 @@
           const workflow = document.getElementById('workFlow').value;
           const livenessConfig = document.getElementById('livenessConfig').value;
           const idVerifyConfig = document.getElementById('idVerifyConfig').value;
-          const countryCode = document.getElementById('countryCode').value;
+          let countryCode = document.getElementById('countryCode').value;
+          if (workflow === 'identity-verification') countryCode = 'IDN';
             const idFraudShield = document.getElementById('idFraudShield')?.value || '4e93b21b-7e37-4995-bc00-738daad55877';
             const userId = document.getElementById('userid')?.value || 'newtonjava@vida.id';
           // Convert the string to an object
@@ -237,7 +238,8 @@
                     ...livenessDynamicConfig
                   },
                     identityVerification:{
-                    ...identifyVerificationConfig
+                    ...identifyVerificationConfig,
+                    ...(workflow === 'identity-verification' ? { verificationType: 'authoritative', documentType: 'KTP' } : {})
                   }
                 }, 
                 onComplete: (apiResponse) => { 
