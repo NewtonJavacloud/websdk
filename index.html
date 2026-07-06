@@ -103,6 +103,17 @@
             </select>
         </div>
 
+        <div class="section hidden" id="idVerificationFields">
+            <h2>Mobile Number</h2>
+            <input type="text" id="mobile" placeholder="Enter Mobile Number" value="919000900012">
+            <h2>Client Transaction ID</h2>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <input type="text" id="clientTrxId" placeholder="Auto-generated UUID" style="flex:1;">
+                <button type="button" onclick="document.getElementById('clientTrxId').value = crypto.randomUUID();" style="padding:6px 12px; cursor:pointer;">&#x21bb;</button>
+            </div>
+            <br>
+            <button type="button" onclick="executeScript()" style="padding:8px 16px; cursor:pointer;">Generate Token</button>
+        </div>
 
         <div class="section">
             <h2>Response:</h2>
@@ -255,6 +266,22 @@
             alert('Please enter valid JSON in Locale Configs and Theme Configs.');
           }
         });
+      </script>
+      <script>
+        function toggleIdVerificationFields() {
+          const workflow = document.getElementById('workFlow').value;
+          const section = document.getElementById('idVerificationFields');
+          if (workflow === 'identity-verification') {
+            section.classList.remove('hidden');
+            if (!document.getElementById('clientTrxId').value) {
+              document.getElementById('clientTrxId').value = crypto.randomUUID();
+            }
+          } else {
+            section.classList.add('hidden');
+          }
+        }
+        document.getElementById('workFlow').addEventListener('change', toggleIdVerificationFields);
+        toggleIdVerificationFields();
       </script>
       <script src="environment.js"></script>
       <script src="decryption.js"></script>
