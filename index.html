@@ -96,23 +96,26 @@
             <div class="checkbox-container">
                 <label><input type="checkbox" id="skipTutorial"> Skip Tutorial Screen</label><br>
                 <label><input type="checkbox" id="skipSelfieReview"> Skip Selfie Review Screen</label><br>
+                <label><input type="checkbox" id="skipDocBackSideCapture"> Skip Doc Back Side Capture</label><br>
             </div>
 
              <h2>WorkFlow</h2>
             <select id="workFlow">
                 <option value="liveness">Liveness</option>
                 <option value="geox-kyc">GeoX-OCR KYC</option>
-                <option value="identity-verification">Indo KYC</option>
+                <option value="indo-kyc">Indo KYC</option>
             </select>
         </div>
 
         <div class="section hidden" id="idVerificationFields">
-            <h2>Mobile Number</h2>
-            <input type="text" id="mobile" placeholder="Enter Mobile Number" value="+919000900012">
-            <h2>Client Transaction ID</h2>
-            <div style="display:flex; align-items:center; gap:8px;">
-                <input type="text" id="clientTrxId" placeholder="Auto-generated UUID" style="flex:1;">
-                <button type="button" onclick="document.getElementById('clientTrxId').value = crypto.randomUUID();" style="padding:6px 12px; cursor:pointer;">&#x21bb;</button>
+            <div id="indoKycFields">
+                <h2>Mobile Number</h2>
+                <input type="text" id="mobile" placeholder="Enter Mobile Number" value="+919000900012">
+                <h2>Client Transaction ID</h2>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <input type="text" id="clientTrxId" placeholder="Auto-generated UUID" style="flex:1;">
+                    <button type="button" onclick="document.getElementById('clientTrxId').value = crypto.randomUUID();" style="padding:6px 12px; cursor:pointer;">&#x21bb;</button>
+                </div>
             </div>
             <br>
             <button type="button" onclick="executeScript()" style="padding:8px 16px; cursor:pointer;">Generate Token</button>
@@ -229,11 +232,12 @@
           const themeCheckbox = document.getElementById('themeCheckbox');
           const themeConfigs = themeCheckbox && themeCheckbox.checked
                                 ? document.getElementById('themeConfig').value : '';
-          const workflow = document.getElementById('workFlow').value;
+          const selectedWorkflow = document.getElementById('workFlow').value;
+          const workflow = selectedWorkflow === 'liveness' ? 'liveness' : 'identity-verification';
           const livenessConfig = document.getElementById('livenessConfig').value;
           const idVerifyConfig = document.getElementById('idVerifyConfig').value;
           let countryCode = document.getElementById('countryCode').value;
-          if (workflow === 'identity-verification') countryCode = 'IDN';
+          if (selectedWorkflow === 'indo-kyc') countryCode = 'IDN';
             const idFraudShield = document.getElementById('idFraudShield')?.value || '4e93b21b-7e37-4995-bc00-738daad55877';
             const userId = document.getElementById('userid')?.value || '';
           // Convert the string to an object
@@ -267,13 +271,13 @@
                     detectionTimeOut:detectionTimeout,
                     ...livenessDynamicConfig
                   },
-                    identityVerification: workflow === 'geox-kyc' ? {
+                    identityVerification: selectedWorkflow === 'geox-kyc' ? {
                         docVerification: {
-                            skipDocBackSideCapture: identifyVerificationConfig
+                            skipDocBackSideCapture: document.getElementById('skipDocBackSideCapture').checked
                         }
                     } : {
                     ...identifyVerificationConfig,
-                    ...(workflow === 'identity-verification' ? { verificationType: 'authoritative', documentType: 'KTP' } : {})
+                    ...(selectedWorkflow === 'indo-kyc' ? { verificationType: 'authoritative', documentType: 'KTP' } : {})
                   }
                 }, 
                 onComplete: (apiResponse) => { 
@@ -307,7 +311,8 @@
         function toggleIdVerificationFields() {
           const workflow = document.getElementById('workFlow').value;
           const section = document.getElementById('idVerificationFields');
-          if (workflow === 'identity-verification') {
+          const indoKycFields = document.getElementById('indoKycFields');
+          if (workflow === 'indo-kyc') {
             section.classList.remove('hidden');
             if (!document.getElementById('clientTrxId').value) {
               document.getElementById('clientTrxId').value = crypto.randomUUID();
