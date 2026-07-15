@@ -272,6 +272,7 @@
                     ...livenessDynamicConfig
                   },
                     identityVerification: selectedWorkflow === 'geox-kyc' ? {
+                        ...identifyVerificationConfig,
                         docVerification: {
                             skipDocBackSideCapture: document.getElementById('skipDocBackSideCapture').checked
                         }
