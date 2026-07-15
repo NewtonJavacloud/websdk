@@ -96,7 +96,7 @@
             <div class="checkbox-container">
                 <label><input type="checkbox" id="skipTutorial"> Skip Tutorial Screen</label><br>
                 <label><input type="checkbox" id="skipSelfieReview"> Skip Selfie Review Screen</label><br>
-                <label><input type="checkbox" id="skipDocBackSideCapture"> Skip Doc Back Side Capture</label><br>
+
             </div>
 
              <h2>WorkFlow</h2>
@@ -119,6 +119,41 @@
             </div>
             <br>
             <button type="button" onclick="executeScript()" style="padding:8px 16px; cursor:pointer;">Generate Token</button>
+        </div>
+
+        <div class="section hidden" id="geoxKycFields">
+            <h2>GeoX KYC Config</h2>
+
+            <h3>User Consent</h3>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="geoxUserConsentObtained" checked> Consent Obtained</label>
+            </div>
+
+            <h3>Document Type</h3>
+            <select id="geoxDocumentType">
+                <option value="MyKad">MyKad</option>
+                <option value="Passport">Passport</option>
+                <option value="KTP">KTP</option>
+            </select>
+
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="geoxSkipFaceMatch" checked> Skip Face Match</label>
+            </div>
+
+            <h3>Doc Verification</h3>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="geoxSkipDocBackSideCapture" checked> Skip Doc Back Side Capture</label>
+                <label><input type="checkbox" id="geoxSkipDocSelectionScreen" checked> Skip Doc Selection Screen</label>
+                <label><input type="checkbox" id="geoxSkipIntroductionScreen" checked> Skip Introduction Screen</label>
+                <label><input type="checkbox" id="geoxSkipDocTutorialScreen" checked> Skip Tutorial Screen</label>
+                <label><input type="checkbox" id="geoxVerifyFrontBackSeparately" checked> Verify Front/Back Separately</label>
+            </div>
+
+            <h3>Face Match</h3>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="geoxPerformFaceMatchIfLivenessFails" checked> Perform Face Match If Liveness Fails</label>
+                <label><input type="checkbox" id="geoxFaceMatchSkipTutorial" checked> Skip Tutorial Screen</label>
+            </div>
         </div>
 
         <div class="section">
@@ -273,9 +308,23 @@
                   },
                     identityVerification: selectedWorkflow === 'geox-kyc' ? {
                         ...identifyVerificationConfig,
+                        userConsent: {
+                            obtained: document.getElementById('geoxUserConsentObtained').checked,
+                            obtainedAt: Date.now(),
+                        },
+                        documentType: document.getElementById('geoxDocumentType').value,
+                        skipFaceMatch: document.getElementById('geoxSkipFaceMatch').checked,
                         docVerification: {
-                            skipDocBackSideCapture: document.getElementById('skipDocBackSideCapture').checked
-                        }
+                            skipDocBackSideCapture: document.getElementById('geoxSkipDocBackSideCapture').checked,
+                            skipDocSelectionScreen: document.getElementById('geoxSkipDocSelectionScreen').checked,
+                            skipIntroductionScreen: document.getElementById('geoxSkipIntroductionScreen').checked,
+                            skipTutorialScreen: document.getElementById('geoxSkipDocTutorialScreen').checked,
+                            VerifyFrontsideBacksideofdocumentseparately: document.getElementById('geoxVerifyFrontBackSeparately').checked,
+                        },
+                        faceMatch: {
+                            performFaceMatchIfLivenessFails: document.getElementById('geoxPerformFaceMatchIfLivenessFails').checked,
+                            skipTutorialScreen: document.getElementById('geoxFaceMatchSkipTutorial').checked,
+                        },
                     } : {
                     ...identifyVerificationConfig,
                     ...(selectedWorkflow === 'indo-kyc' ? { verificationType: 'authoritative', documentType: 'KTP' } : {})
@@ -312,14 +361,19 @@
         function toggleIdVerificationFields() {
           const workflow = document.getElementById('workFlow').value;
           const section = document.getElementById('idVerificationFields');
-          const indoKycFields = document.getElementById('indoKycFields');
+          const geoxSection = document.getElementById('geoxKycFields');
           if (workflow === 'indo-kyc') {
             section.classList.remove('hidden');
+            geoxSection.classList.add('hidden');
             if (!document.getElementById('clientTrxId').value) {
               document.getElementById('clientTrxId').value = crypto.randomUUID();
             }
+          } else if (workflow === 'geox-kyc') {
+            section.classList.add('hidden');
+            geoxSection.classList.remove('hidden');
           } else {
             section.classList.add('hidden');
+            geoxSection.classList.add('hidden');
           }
         }
         document.getElementById('workFlow').addEventListener('change', toggleIdVerificationFields);
