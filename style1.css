@@ -84,7 +84,7 @@
             font-weight: 500;
         }
 
-        h2 {
+        h2, h3 {
             margin-bottom: 15px;
             color: #4CAF50;
         }
@@ -125,6 +125,9 @@
 
         .checkbox-container input[type="checkbox"] {
             margin-right: 5px;
+        }
+        .checkbox-container label {
+            text-align: left;
         }
         .inline-radio {
             display: inline-block;

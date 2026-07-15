@@ -136,23 +136,21 @@
                 <option value="KTP">KTP</option>
             </select>
 
-            <div class="checkbox-container">
-                <label><input type="checkbox" id="geoxSkipFaceMatch" checked> Skip Face Match</label>
-            </div>
-
             <h3>Doc Verification</h3>
             <div class="checkbox-container">
                 <label><input type="checkbox" id="geoxSkipDocBackSideCapture" checked> Skip Doc Back Side Capture</label>
                 <label><input type="checkbox" id="geoxSkipDocSelectionScreen" checked> Skip Doc Selection Screen</label>
                 <label><input type="checkbox" id="geoxSkipIntroductionScreen" checked> Skip Introduction Screen</label>
-                <label><input type="checkbox" id="geoxSkipDocTutorialScreen" checked> Skip Tutorial Screen</label>
+                <label><input type="checkbox" id="geoxSkipDocTutorialScreen" checked> Skip Doc Tutorial Screen</label>
                 <label><input type="checkbox" id="geoxVerifyFrontBackSeparately" checked> Verify Front/Back Separately</label>
             </div>
 
             <h3>Face Match</h3>
             <div class="checkbox-container">
-                <label><input type="checkbox" id="geoxPerformFaceMatchIfLivenessFails" checked> Perform Face Match If Liveness Fails</label>
-                <label><input type="checkbox" id="geoxFaceMatchSkipTutorial" checked> Skip Tutorial Screen</label>
+                <label><input type="checkbox" id="geoxFaceMatchSkipTutorial" checked> Skip Liveness Tutorial Screen</label>
+            </div>
+            <div class="checkbox-container">
+                <label><input type="checkbox" id="geoxSkipFaceMatch" checked> Skip Face Match</label>
             </div>
         </div>
 
@@ -322,7 +320,6 @@
                             VerifyFrontsideBacksideofdocumentseparately: document.getElementById('geoxVerifyFrontBackSeparately').checked,
                         },
                         faceMatch: {
-                            performFaceMatchIfLivenessFails: document.getElementById('geoxPerformFaceMatchIfLivenessFails').checked,
                             skipTutorialScreen: document.getElementById('geoxFaceMatchSkipTutorial').checked,
                         },
                     } : {
